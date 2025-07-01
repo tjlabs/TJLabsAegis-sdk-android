@@ -16,7 +16,6 @@ import com.tjlabs.tjlabsauth_sdk_android.TJLabsAuthManager
 import java.util.Timer
 import java.util.TimerTask
 import kotlin.math.abs
-import kotlin.math.pow
 
 class AegisManager(private val application: Application) : RFDGenerator.RFDCallback, UVDGenerator.UVDCallback {
     private val id = "temp_id"
@@ -52,13 +51,13 @@ class AegisManager(private val application: Application) : RFDGenerator.RFDCallb
             Log.d("CheckSteps", "steps in window : $stepsInWindow // stepsPerSec : $stepsPerSec // stepWindowSec : $stepWindowSec")
             stepScore = stepsPerSec
 
-            callback.onJAegisResult(rssiScore, stepScore)
+            callback.onAegisResult(rssiScore, stepScore)
         }
     }
 
     fun startAegis(tenantID : String, tenantPw : String, callback: AegisCallback) {
         if (isStartService) {
-            callback.onJAegisError(false, "서비스가 중복 실행 되었습니다.")
+            callback.onAegisError(false, "서비스가 중복 실행 되었습니다.")
             return
         }
         TJLabsAuthManager.setServerURL(serverType = "guardians")
@@ -81,17 +80,17 @@ class AegisManager(private val application: Application) : RFDGenerator.RFDCallb
                                 uvdGenerator.generateUvd(maxPDRStepLength = 0.7f, isSaveData = false, fileName = "aos_sensor", callback = this)
                                 isStartService = true
                                 startTimer(callback)
-                                callback.onJAegisSuccess(true, "start Aegis")
+                                callback.onAegisSuccess(true, "start Aegis")
                             } else{
-                                callback.onJAegisError(false,  "checkIsAvailableUvd : false")
+                                callback.onAegisError(false,  "checkIsAvailableUvd : false")
                             }
                         }
                     } else {
-                        callback.onJAegisError(false,  "checkIsAvailableRfd : false")
+                        callback.onAegisError(false,  "checkIsAvailableRfd : false")
                     }
                 }
             } else {
-                callback.onJAegisError(false, "unauthorized, code : $code")
+                callback.onAegisError(false, "unauthorized, code : $code")
             }
         }
     }

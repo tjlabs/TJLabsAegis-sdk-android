@@ -1,8 +1,8 @@
 package com.tjlabs.tjlabsaegis_sdk_android.callback
 
 interface AegisCallback {
-    fun onJAegisSuccess(isSuccess: Boolean, msg: String)
-    fun onJAegisError(isFail: Boolean, msg: String)
-    fun onJAegisResult(rssiScore : Float, stepScore : Float) // TBD
+    fun onAegisSuccess(isSuccess: Boolean, msg: String)
+    fun onAegisError(isFail: Boolean, msg: String)
+    fun onAegisResult(rssiScore : Float, stepScore : Float) // TBD
 
 }

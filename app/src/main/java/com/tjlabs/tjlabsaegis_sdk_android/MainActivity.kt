@@ -71,16 +71,16 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnStart.setOnClickListener {
             aegisManager.startAegis(tenantID = tenantId, tenantPw = tenantPw, callback = object : AegisCallback{
-                override fun onJAegisSuccess(isSuccess: Boolean, msg: String) {
+                override fun onAegisSuccess(isSuccess: Boolean, msg: String) {
                     Toast.makeText(applicationContext, "Start Service", Toast.LENGTH_SHORT).show()
                     Log.d(TAG,"aegis start $isSuccess // msg : $msg")
                 }
 
-                override fun onJAegisError(isFail: Boolean, msg: String) {
+                override fun onAegisError(isFail: Boolean, msg: String) {
                     Log.d(TAG,"aegis start $isFail // msg : $msg")
                 }
 
-                override fun onJAegisResult(rssiScore: Float, stepScore: Float) {
+                override fun onAegisResult(rssiScore: Float, stepScore: Float) {
                     runOnUiThread {
                         binding.txtRssiScore.text = rssiScore.toString()
                         binding.txtStepScore.text = stepScore.toString()
