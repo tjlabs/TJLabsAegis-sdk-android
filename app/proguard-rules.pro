@@ -70,3 +70,7 @@
 -keep class com.tjlabs.tjlabsaegis_sdk_android.** {
     public <methods>;
 }
+
+-keep class com.tjlabs.tjlabsaegis_sdk_android.** { public *; }
+-keepclasseswithmembers class com.tjlabs.tjlabsaegis_sdk_android.** { public *; }
+-keepclassmembers class com.tjlabs.tjlabsaegis_sdk_android.** { public *; }
