@@ -10,7 +10,7 @@ plugins {
 
 val versionMajor = 1
 val versionMinor = 0
-val versionPatch = 6
+val versionPatch = 7
 
 android {
     namespace = "com.tjlabs.tjlabsaegis_sdk_android"
@@ -57,6 +57,7 @@ android {
 }
 
 dependencies {
+    implementation ("com.github.tjlabs:TJLabsAuth-sdk-android:1.0.1")
     implementation ("androidx.security:security-crypto-ktx:1.1.0-alpha03")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
