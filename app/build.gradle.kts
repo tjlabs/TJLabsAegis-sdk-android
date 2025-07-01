@@ -10,7 +10,7 @@ plugins {
 
 val versionMajor = 1
 val versionMinor = 0
-val versionPatch = 3
+val versionPatch = 4
 
 // 최상단에 import 추가
 
@@ -71,12 +71,10 @@ android {
 }
 
 dependencies {
-    implementation ("com.tjlabs:appauthlib:1.0.3")
-
+    implementation ("com.github.tjlabs:TJLabsAuth-sdk-android:1.0.1")
     implementation ("androidx.security:security-crypto-ktx:1.1.0-alpha03")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -89,15 +87,17 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 }
 
+
 afterEvaluate {
     publishing {
         publications {
             create<MavenPublication>("release") {
                 from(components["release"])
-                groupId = tjGroupId
-                artifactId = tjArtifactId
+                groupId = "com.github.tjlabs"
+                artifactId = "TJLabsAegis-sdk-android"
                 version = "$versionMajor.$versionMinor.$versionPatch"
             }
         }
     }
 }
+
