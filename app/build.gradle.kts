@@ -10,7 +10,7 @@ plugins {
 
 val versionMajor = 1
 val versionMinor = 0
-val versionPatch = 8
+val versionPatch = 9
 
 android {
     namespace = "com.tjlabs.tjlabsaegis_sdk_android"

@@ -66,4 +66,4 @@
 # is used.
 -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
 
--keep class com.tjlabs.olympus_android_app.** { *; }
+-keep class com.tjlabs.tjlabsaegis_sdk_android.** { *; }
