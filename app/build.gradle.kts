@@ -10,7 +10,7 @@ plugins {
 
 val versionMajor = 1
 val versionMinor = 0
-val versionPatch = 1
+val versionPatch = 2
 
 // 최상단에 import 추가
 
@@ -65,6 +65,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig = true
         viewBinding = true
     }
 }
