@@ -10,21 +10,7 @@ plugins {
 
 val versionMajor = 1
 val versionMinor = 0
-val versionPatch = 4
-
-// 최상단에 import 추가
-
-// local.properties 파일 읽기
-val localProperties = Properties().apply {
-    val localPropertiesFile = rootProject.file("local.properties")
-    if (localPropertiesFile.exists()) {
-        load(localPropertiesFile.inputStream())
-    }
-}
-
-val tjGroupId: String = localProperties.getProperty("GROUP_ID") ?: ""
-val tjArtifactId: String = localProperties.getProperty("ARTIFACT_ID") ?: ""
-
+val versionPatch = 5
 
 android {
     namespace = "com.tjlabs.tjlabsaegis_sdk_android"
@@ -41,11 +27,11 @@ android {
 
     }
 
-    libraryVariants.all {
-        outputs.all {
-            (this as BaseVariantOutputImpl).outputFileName = "app-release-aegis.aar"
-        }
-    }
+//    libraryVariants.all {
+//        outputs.all {
+//            (this as BaseVariantOutputImpl).outputFileName = "app-release-aegis.aar"
+//        }
+//    }
 
     buildTypes {
         release {
