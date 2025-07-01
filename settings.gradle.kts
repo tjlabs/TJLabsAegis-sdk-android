@@ -14,8 +14,6 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        google()
-        mavenCentral()
         maven { setUrl(uri("/Users/yuchangsoo/local-maven-repo")) }
     }
 }
