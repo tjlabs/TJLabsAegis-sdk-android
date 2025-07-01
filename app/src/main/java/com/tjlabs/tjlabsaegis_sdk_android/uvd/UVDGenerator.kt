@@ -11,7 +11,7 @@ import com.tjlabs.tjlabsaegis_sdk_android.uvd.pdr.TJLabsPDRDistanceEstimator
 
 const val sensorFrequency = 40
 
-class UVDGenerator(private val application: Application, private val userId : String = "") {
+internal class UVDGenerator(private val application: Application, private val userId : String = "") {
     interface UVDCallback {
         fun onUvdResult(mode : UserMode, uvd: UserVelocity)
 

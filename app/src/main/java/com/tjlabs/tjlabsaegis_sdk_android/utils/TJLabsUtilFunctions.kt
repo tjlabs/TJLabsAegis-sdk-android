@@ -14,7 +14,7 @@ import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-object TJLabsUtilFunctions{
+internal object TJLabsUtilFunctions{
     fun frequency2Millis(frequency : Int) : Int {
         return 1000 / frequency
     }

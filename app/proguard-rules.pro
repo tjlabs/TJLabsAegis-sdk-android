@@ -67,3 +67,8 @@
 -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
 
 -keep class com.tjlabs.tjlabsaegis_sdk_android.** { *; }
+
+# 클래스는 유지하되 public 메서드만 유지
+-keep class com.tjlabs.tjlabsaegis_sdk_android.** {
+    public <methods>;
+}

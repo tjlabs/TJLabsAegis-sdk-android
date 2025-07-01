@@ -27,11 +27,11 @@ internal data class RSSIClass(
     }
 }
 
-enum class ScanMode{
+internal enum class ScanMode{
     NO_FILTER_SCAN, ONLY_WARD_SCAN, ONLY_SEI_SCAN, WARD_SEI_SCAN
 }
 
-object RFDErrorCode {
+internal object RFDErrorCode {
     //RFD Error 1XX
     //BLE Hardware
     const val BLUETOOTH_DISABLED = 100

@@ -15,7 +15,7 @@ import com.tjlabs.tjlabsaegis_sdk_android.utils.TJLabsUtilFunctions
 import java.util.Timer
 import java.util.TimerTask
 
-class RFDGenerator(private val application: Application, val userId : String = "") {
+internal class RFDGenerator(private val application: Application, val userId : String = "") {
     interface RFDCallback {
         fun onRfdResult(rfd: ReceivedForce)
 

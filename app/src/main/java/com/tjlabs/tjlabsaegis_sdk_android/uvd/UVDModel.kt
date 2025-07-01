@@ -11,7 +11,7 @@ data class UserVelocity(
     val looking: Boolean = false
 )
 
-data class UnitDistance(
+internal data class UnitDistance(
     var index: Int = 0,
     var length: Float = 0f,
     var velocity: Float = 0f,

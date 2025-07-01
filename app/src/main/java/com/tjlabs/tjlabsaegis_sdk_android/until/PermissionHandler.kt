@@ -10,7 +10,7 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
-class PermissionHandler(
+internal class PermissionHandler(
     private val activity: Activity,
     private val permissions: Array<String>,
     private val onAllGranted: () -> Unit

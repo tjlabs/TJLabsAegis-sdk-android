@@ -132,8 +132,6 @@ class AegisManager(private val application: Application) : RFDGenerator.RFDCallb
     fun setNearestBWardID(bWardId : String) {
         nearestBWardId = bWardId
         calibrationBWardRSSI  = currentRfd.rfs.entries.find { it.key == nearestBWardId }?.value ?: -100f
-        Log.d(TAG, "setBWardID : $bWardId // calibrationBWardRSSI : $calibrationBWardRSSI")
-
     }
 
     fun getNearestBWardID() : String {
