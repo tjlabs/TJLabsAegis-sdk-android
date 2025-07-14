@@ -141,14 +141,6 @@ class AegisManager(private val application: Application) : RFDGenerator.RFDCallb
         }
     }
 
-    fun getNearestBWardID() : String {
-        return nearestBWardId
-    }
-
-    fun getNearestBWardRSSI() : Float {
-        return currentRfd.rfs.maxByOrNull { it.value }?.value ?: -100f
-    }
-
     fun setStepWindowSec(sec : Int) {
         stepWindowSec = sec
     }
