@@ -120,12 +120,6 @@ class AegisManager(private val application: Application) : RFDGenerator.RFDCallb
         isStartTimer = false
     }
 
-    fun findNearestBWard(): Pair<String, Float> {
-        nearestBWardId = currentRfd.rfs.maxByOrNull { it.value }?.key ?: ""
-        calibrationBWardRSSI  = currentRfd.rfs.maxByOrNull { it.value }?.value ?: -100f
-        return nearestBWardId to calibrationBWardRSSI
-    }
-
     fun setNearestBWardID(bWardId: String, completion: (Boolean, String) -> Unit) {
         val rssi = currentRfd.rfs.entries.find { it.key == bWardId }?.value
 

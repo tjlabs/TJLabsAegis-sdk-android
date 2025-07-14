@@ -100,11 +100,6 @@ class MainActivity : AppCompatActivity() {
             aegisManager.stopAegis()
         }
 
-        binding.btnFind.setOnClickListener {
-            val nearestBWard = aegisManager.findNearestBWard()
-            binding.txtFindBWard.text = nearestBWard.first
-            binding.txtFindBWardRssi.text = nearestBWard.second.toString()
-        }
 
         binding.btnSetBwardId.setOnClickListener {
             aegisManager.setNearestBWardID(binding.editSetBWardId.text.toString()) { success, message ->
