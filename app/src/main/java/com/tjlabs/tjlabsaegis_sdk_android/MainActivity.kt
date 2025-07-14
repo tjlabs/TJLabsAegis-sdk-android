@@ -76,10 +76,6 @@ class MainActivity : AppCompatActivity() {
                     Log.d(TAG,"aegis start $isSuccess // msg : $msg")
                 }
 
-                override fun onAegisError(isFail: Boolean, msg: String) {
-                    Log.d(TAG,"aegis start $isFail // msg : $msg")
-                }
-
                 override fun onAegisResult(rssiScore: Float, stepScore: Float) {
                     runOnUiThread {
                         binding.txtRssiScore.text = rssiScore.toString()
@@ -111,7 +107,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnSetBwardId.setOnClickListener {
-            aegisManager.setNearestBWardID(binding.editSetBWardId.text.toString())
+            aegisManager.setNearestBWardID(binding.editSetBWardId.text.toString()) { success, message ->
+                if (success) {
+                    Log.d("SetBWard", "Success: $message")
+                } else {
+                    Log.e("SetBWard", "Error: $message")
+                }
+            }
         }
 
         aegisManager.setStepWindowSec(binding.barStepSetting.progress)
