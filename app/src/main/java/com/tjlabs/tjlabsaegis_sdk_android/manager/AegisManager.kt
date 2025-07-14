@@ -35,7 +35,6 @@ class AegisManager(private val application: Application) : RFDGenerator.RFDCallb
 
     private val stepTimestamps = mutableListOf<Long>()
     private var stepWindowSec = 60
-    private val expectedSteps = 20
     private var stepScore = 0f
     private var rssiScore = 0f
 
@@ -48,16 +47,14 @@ class AegisManager(private val application: Application) : RFDGenerator.RFDCallb
 
             val stepsInWindow = stepTimestamps.size
             val stepsPerSec = stepsInWindow.toFloat() / stepWindowSec
-            Log.d("CheckSteps", "steps in window : $stepsInWindow // stepsPerSec : $stepsPerSec // stepWindowSec : $stepWindowSec")
             stepScore = stepsPerSec
-
             callback.onAegisResult(rssiScore, stepScore)
         }
     }
 
     fun startAegis(tenantID : String, tenantPw : String, callback: AegisCallback) {
         if (isStartService) {
-            callback.onAegisError(false, "서비스가 중복 실행 되었습니다.")
+            callback.onAegisSuccess(false, "The service is already running.")
             return
         }
         TJLabsAuthManager.setServerURL(serverType = "guardians")
@@ -69,10 +66,10 @@ class AegisManager(private val application: Application) : RFDGenerator.RFDCallb
                 rfdGenerator = RFDGenerator(application, id)
                 uvdGenerator = UVDGenerator(application, id)
                 rfdGenerator.checkIsAvailableRfd(this) {
-                        isRfdSuccess ->
+                        isRfdSuccess, rfdMsg ->
                     if (isRfdSuccess) {
                         uvdGenerator.checkIsAvailableUvd(this){
-                                isUvdSuccess ->
+                                isUvdSuccess, uvdMsg ->
                             if (isUvdSuccess) {
                                 uvdGenerator.setUserMode(mode)
                                 rfdGenerator.generateRfd(RFD_INTERVAL, BLE_SCAN_WINDOW_TIME_MILLIS, -100,
@@ -80,17 +77,17 @@ class AegisManager(private val application: Application) : RFDGenerator.RFDCallb
                                 uvdGenerator.generateUvd(maxPDRStepLength = 0.7f, isSaveData = false, fileName = "aos_sensor", callback = this)
                                 isStartService = true
                                 startTimer(callback)
-                                callback.onAegisSuccess(true, "start Aegis")
+                                callback.onAegisSuccess(true, "start Aegis success")
                             } else{
-                                callback.onAegisError(false,  "checkIsAvailableUvd : false")
+                                callback.onAegisSuccess(false, uvdMsg)
                             }
                         }
                     } else {
-                        callback.onAegisError(false,  "checkIsAvailableRfd : false")
+                        callback.onAegisSuccess( false, rfdMsg)
                     }
                 }
             } else {
-                callback.onAegisError(false, "unauthorized, code : $code")
+                callback.onAegisSuccess(false, "unauthorized, code : $code")
             }
         }
     }
@@ -129,9 +126,19 @@ class AegisManager(private val application: Application) : RFDGenerator.RFDCallb
         return nearestBWardId to calibrationBWardRSSI
     }
 
-    fun setNearestBWardID(bWardId : String) {
-        nearestBWardId = bWardId
-        calibrationBWardRSSI  = currentRfd.rfs.entries.find { it.key == nearestBWardId }?.value ?: -100f
+    fun setNearestBWardID(bWardId: String, completion: (Boolean, String) -> Unit) {
+        val rssi = currentRfd.rfs.entries.find { it.key == bWardId }?.value
+
+        return if (rssi != null) {
+            nearestBWardId = bWardId
+            calibrationBWardRSSI = rssi
+            completion(true, "Successfully set B-Ward ID: $bWardId with RSSI: $rssi")
+        } else if (!isStartService) {
+            completion(false, "Please start aegis service first")
+        }
+        else {
+            completion(false, "Failed to set B-Ward ID: $bWardId. ID not found in current RFD data.")
+        }
     }
 
     fun getNearestBWardID() : String {
@@ -150,7 +157,6 @@ class AegisManager(private val application: Application) : RFDGenerator.RFDCallb
         currentRfd = rfd
         val filteredRssi = rfd.rfs.entries.find { it.key == nearestBWardId }?.value ?: -100f
         rssiScore = abs(calibrationBWardRSSI - filteredRssi)
-        Log.e(TAG, "TJLabsBluetoothFunctions : $filteredRssi")
     }
 
     override fun onRfdError(code: Int, msg: String) {
