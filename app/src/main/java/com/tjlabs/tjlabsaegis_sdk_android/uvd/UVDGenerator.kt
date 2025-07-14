@@ -42,12 +42,12 @@ internal class UVDGenerator(private val application: Application, private val us
         userMode = mode
     }
 
-    fun checkIsAvailableUvd(callback : UVDCallback, completion : (Boolean) -> Unit) {
+    fun checkIsAvailableUvd(callback : UVDCallback, completion : (Boolean, String) -> Unit) {
         val (isCheckSensorSuccess, msgCheckSensor) = tjLabsSensorManager.checkSensorAvailability()
         if (isCheckSensorSuccess) {
-            completion(true)
+            completion(true, msgCheckSensor)
         } else {
-            completion(false)
+            completion(false, msgCheckSensor)
             callback.onUvdError(msgCheckSensor)
         }
     }
@@ -79,48 +79,6 @@ internal class UVDGenerator(private val application: Application, private val us
                 preTime = curTime
             }
         })
-    }
-
-    fun generateSimulationUvd(defaultPDRStepLength: Float = tjLabsPdrDistanceEstimator.getDefaultStepLength(),
-                              minPDRStepLength : Float = tjLabsPdrDistanceEstimator.getMinStepLength(),
-                              maxPDRStepLength : Float = tjLabsPdrDistanceEstimator.getMaxStepLength(),
-                              baseFileName : String,
-                              callback : UVDCallback
-    ) {
-
-        uvdGenerationTimeMillis = System.currentTimeMillis()
-        tjLabsPdrDistanceEstimator.setDefaultStepLength(defaultPDRStepLength)
-        tjLabsPdrDistanceEstimator.setMinStepLength(minPDRStepLength)
-        tjLabsPdrDistanceEstimator.setMaxStepLength(maxPDRStepLength)
-
-        if (JupiterSimulator.loadSensorData(application, baseFileName)) {
-            tjLabsSensorManager.getSensorDataResultOrNull(object : TJLabsSensorManager.SensorResultListener{
-                override fun onSensorChangedResult(sensorData: SensorData) {
-                    val index = sensorSimulationIndex % sensorMutableList.size
-                    val element = sensorMutableList[index]
-                    val convertResult = convertToSensorData(element)
-                    val simulationSensorData = convertResult.second
-                    val simulationTime = convertResult.first
-                    sensorSimulationIndex++
-
-                    val curTime = System.currentTimeMillis()
-                    val dtime = if (preTime != 0L) {simulationTime - preTime} else {null}
-                    if (sensorSimulationIndex <= sensorMutableList.size) {
-                        when (userMode) {
-                            UserMode.MODE_PEDESTRIAN -> generatePedestrianUvd(curTime, dtime,simulationSensorData, callback)
-                            UserMode.MODE_AUTO -> {}
-                            UserMode.MODE_VEHICLE -> {}
-                        }
-                    }else{
-                        stopUvdGeneration()
-                    }
-                    preTime = simulationTime //시뮬레이션 동작 중일때는 시뮬레이션 시간기준으로 dTime 계산하기
-
-                }
-            })
-        } else {
-            callback.onUvdError("Load Sensor Simulation Data Error!")
-        }
     }
 
     private fun resetVelocityAfterSeconds(velocity : Float, sec : Int = 2) : Float {

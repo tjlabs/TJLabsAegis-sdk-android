@@ -45,42 +45,23 @@ internal class TJLabsSensorManager(private val context : Context, private val fr
             sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_GAME)
     }
 
-    fun checkSensorAvailability() : Pair<Boolean, String> {
+    fun checkSensorAvailability(): Pair<Boolean, String> {
         val accCheck = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         val gyroCheck = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
         val magUnCaliCheck = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED)
         val magCheck = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
-        val pressureCheck = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE)
-        val rotationVectorCheck = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
-        val gameRotationVectorCheck = sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR)
-        var errorMsg = ""
-        if (accCheck == null) {
-            errorMsg += "acc"
-        }
-        if (gyroCheck == null) {
-            errorMsg += ",gyro"
-        }
-        if (magUnCaliCheck == null) {
-            errorMsg += ",unCali mag"
-        }
-        if (magCheck == null) {
-            errorMsg += ",mag"
-        }
-        if (pressureCheck == null) {
-            errorMsg += ",pressure"
-        }
-        if (rotationVectorCheck == null) {
-            errorMsg += ",rotation vector"
-        }
-        if (gameRotationVectorCheck == null) {
-            errorMsg += ",game rotation vector"
-        }
 
-        return if (accCheck != null && gyroCheck != null && magUnCaliCheck != null && magCheck != null &&
-            pressureCheck != null && rotationVectorCheck != null && gameRotationVectorCheck != null){
-            Pair(true, "Sensor is available")
-        }else{
-            Pair(false, "Sensor is not available")
+        val missingSensors = mutableListOf<String>()
+
+        if (accCheck == null) missingSensors.add("Accelerometer")
+        if (gyroCheck == null) missingSensors.add("Gyroscope")
+        if (magUnCaliCheck == null) missingSensors.add("Uncalibrated Magnetometer")
+        if (magCheck == null) missingSensors.add("Magnetometer")
+
+        return if (missingSensors.isEmpty()) {
+            Pair(true, "All required sensors are available.")
+        } else {
+            Pair(false, "Missing sensors: ${missingSensors.joinToString(", ")}")
         }
     }
 
@@ -97,18 +78,6 @@ internal class TJLabsSensorManager(private val context : Context, private val fr
 
                 Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED -> {
                     System.arraycopy(event.values, 0, sensorData.magRaw, 0, sensorData.magRaw.size)
-                }
-
-                Sensor.TYPE_GAME_ROTATION_VECTOR -> {
-                    System.arraycopy(event.values, 0, sensorData.gameVector, 0, sensorData.gameVector.size)
-                }
-
-                Sensor.TYPE_ROTATION_VECTOR -> {
-                    System.arraycopy(event.values, 0, sensorData.rotVector, 0, sensorData.rotVector.size)
-                }
-
-                Sensor.TYPE_PRESSURE -> {
-                    System.arraycopy(event.values, 0, sensorData.pressure, 0, sensorData.pressure.size)
                 }
             }
         }
